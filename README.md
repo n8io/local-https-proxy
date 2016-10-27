@@ -20,4 +20,4 @@ Part of the proxy creation requires writing an entry to your `hosts` file. That 
 
 
 ## Credits
-	Credit for the process goes to Shane Stillwell and his blog post [Create a local HTTPS proxy server](https://www.shanestillwell.com/2016/10/03/create-a-local-https-proxy-server). All I did was bundle it up into a tidy shell script.
+Credit for the process goes to Shane Stillwell and his blog post [Create a local HTTPS proxy server](https://www.shanestillwell.com/2016/10/03/create-a-local-https-proxy-server). All I did was bundle it up into a tidy shell script.

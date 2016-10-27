@@ -15,6 +15,8 @@ Routes traffic for `https://www.fake-ssl.com` to your app running at `http://loc
 2. Run `./install.sh en0 # or en1 or other`
 2. Done.
 
+![stdOut](https://i.imgsafe.org/23b71e9ca3.png)
+
 ## Why is asking for my password?
 Part of the proxy creation requires writing an entry to your `hosts` file. That requires `sudo` permissions to edit.
 

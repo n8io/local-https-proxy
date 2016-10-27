@@ -13,7 +13,7 @@ Routes traffic for `https://www.fake-ssl.com` to your app running at `http://loc
 1. Run `ifconfig`
 2. Determine which network adapter your are using. It should be the one that has a LAN ip. The entry we're looking for looks like `en0` or `en1`.
 2. Run `./install.sh en0 # or en1 or other`
-2. Done.
+2. Open you browser to [https://www.fake-ssl.com](https://www.fake-ssl.com)
 
 ![stdOut](https://i.imgsafe.org/23b71e9ca3.png)
 

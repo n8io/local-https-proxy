@@ -21,18 +21,25 @@ function build_ssl() {
 }
 
 function add_hosts() {
-	echo -n -e "${COLOR_GREEN}Adding host file entry...${COLOR_RESET}"
-	sed -n "/${HOSTNAME}/!p" /private/etc/hosts > temp && sudo mv temp /private/etc/hosts
+	echo -e "${COLOR_GREEN}Adding host file entry...${COLOR_RESET}"
+	sed -n "/${HOSTNAME}/!p" /private/etc/hosts > temp && sudo mv temp "${HOSTS_FILE}"
 	CMD="echo -e \"${LOCAL_IP}\t${HOSTNAME}\" >> ${HOSTS_FILE}"
 	sudo bash -c "${CMD}"
+	echo -e "${COLOR_GREEN}done.${COLOR_RESET}"
+}
+
+function tear_down() {
+	echo -e "${COLOR_GREEN}Cleaning up...${COLOR_RESET}"
+	sed -n "/${HOSTNAME}/!p" "${HOSTS_FILE}" > temp && sudo mv temp "${HOSTS_FILE}"
+	LOCAL_IP=${LOCAL_IP} docker-compose stop
+	LOCAL_IP=${LOCAL_IP} docker-compose rm -f
 	echo -e "${COLOR_GREEN}done.${COLOR_RESET}"
 }
 
 build_ssl
 add_hosts
 
-echo -e "${COLOR_YELLOW}Starting https proxy. Press Ctrl+C to stop.${COLOR_RESET}"
+echo -e "${COLOR_YELLOW}Starting https proxy... Press Ctrl+C to shutdown.${COLOR_RESET}"
 LOCAL_IP=${LOCAL_IP} docker-compose up
-LOCAL_IP=${LOCAL_IP} docker-compose stop
-LOCAL_IP=${LOCAL_IP} docker-compose rm -f
+tear_down
 echo -e "${COLOR_GREEN}Proxy shutdown successfully.${COLOR_RESET}"

@@ -3,35 +3,36 @@ HOSTS_FILE="/private/etc/hosts"
 HOSTNAME="www.fake-ssl.com"
 LOCAL_IP=$(ipconfig getifaddr "${1:-en0}")
 
+COLOR_RESET="$(tput sgr0)"
+COLOR_GREEN="$(tput setaf 2)"
+COLOR_YELLOW="$(tput setaf 3)"
+
 function build_ssl() {
-	echo -n "Generating ssl cert"
+	echo -e -n "${COLOR_GREEN}Generating ssl cert${COLOR_RESET}..."
 	if [ ! -d ./ssl ]; then
-		echo "..."
 		mkdir -p ./ssl \
 			&& cd "$_" || exit 1
 
 		sudo openssl req -x509 -sha256 -newkey rsa:2048 -keyout cert.key -out cert.pem -days 1024 -nodes -subj '/CN=$(HOSTNAME)'
-		echo "done."
+		echo -e "${COLOR_GREEN}done.${COLOR_RESET}"
 	else
-		echo "...skipped. Certs already generated."
+		echo "skipped. Certs already generated."
 	fi
 }
 
 function add_hosts() {
-	echo -n "Adding host file entry"
-	if ! grep -q "$HOSTNAME" "$HOSTS_FILE"; then
-		echo "..."
-		CMD="echo -e \"${LOCAL_IP}\t${HOSTNAME}\n\" >> ${HOSTS_FILE}"
-		sudo bash -c "${CMD}"
-		echo "done."
-	else
-		echo "...skipped. Already exists."
-	fi
+	echo -n -e "${COLOR_GREEN}Adding host file entry...${COLOR_RESET}"
+	sed -n "/${HOSTNAME}/!p" /private/etc/hosts > temp && sudo mv temp /private/etc/hosts
+	CMD="echo -e \"${LOCAL_IP}\t${HOSTNAME}\" >> ${HOSTS_FILE}"
+	sudo bash -c "${CMD}"
+	echo -e "${COLOR_GREEN}done.${COLOR_RESET}"
 }
 
 build_ssl
 add_hosts
 
-LOCAL_IP=${LOCAL_IP} docker-compose stop \
-	&& LOCAL_IP=${LOCAL_IP} docker-compose rm -f \
-	&& LOCAL_IP=${LOCAL_IP} docker-compose up -d
+echo -e "${COLOR_YELLOW}Starting https proxy. Press Ctrl+C to stop.${COLOR_RESET}"
+LOCAL_IP=${LOCAL_IP} docker-compose up
+LOCAL_IP=${LOCAL_IP} docker-compose stop
+LOCAL_IP=${LOCAL_IP} docker-compose rm -f
+echo -e "${COLOR_GREEN}Proxy shutdown successfully.${COLOR_RESET}"

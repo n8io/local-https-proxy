@@ -17,3 +17,7 @@ Routes traffic for `https://www.fake-ssl.com` to your app running at `http://loc
 
 ## Why is asking for my password?
 Part of the proxy creation requires writing an entry to your `hosts` file. That requires `sudo` permissions to edit.
+
+
+## Credits
+	Credit for the process goes to Shane Stillwell and his blog post [Create a local HTTPS proxy server](https://www.shanestillwell.com/2016/10/03/create-a-local-https-proxy-server). All I did was bundle it up into a tidy shell script.
